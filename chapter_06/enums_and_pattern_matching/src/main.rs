@@ -44,14 +44,6 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
     }
 }
 
-// fn exlusive_test(x: u32) {
-//     match x {
-//         x % 2 == 0 => {println!("I'm divisible by 2");}
-//         x % 3 == 0 => {println!("I'm divisible by 3");}
-//         x % 6 == 0 => {println!("I'm divisible by 2 and 3");}
-//         }
-// }
-
 fn main() {
     let home = IpAddrKind::V4(String::from("127.0.0.1"));
     let loopback = IpAddrKind::V6(String::from("::1"));
@@ -60,6 +52,24 @@ fn main() {
     route(loopback);
     let m = Message::Write(String::from("Hello"));
     m.call();
+    let dice_roll = 9;
+    match dice_roll {
+        3 => add_fancy_hat(),
+        7 => remove_fancy_hat(),
+        _ => reroll(),
+    }
+    let config_max = Some(3u8);
+    match config_max {
+        Some(max) => println!("The maximum is configured to be {}", max),
+        _ => (),
+    }
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {}", max);
+    }
 }
 
 fn route(ip_kind: IpAddrKind) {}
+fn add_fancy_hat() {}
+fn remove_fancy_hat() {}
+fn move_player(num_space: u8) {}
+fn reroll() {}
