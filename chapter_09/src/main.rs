@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{self, ErrorKind, Read};
 
+#[derive(Debug)]
 pub struct Guess {
     value: i32,
 }
@@ -19,6 +20,11 @@ impl Guess {
     }
 }
 
+struct Point<T, U> {
+    x: T,
+    y: U,
+}
+
 fn main() {
     // let f = File::open("hello.txt");
 
@@ -34,11 +40,19 @@ fn main() {
     //         }
     //     },
     // };
+    let my_guess = Guess::new(12);
+    println!("{:?}", my_guess);
+
+    let point1 = Point { x: 12, y: 50 };
+
+    let point2 = Point {
+        x: String::from("test"),
+        y: 12.2,
+    };
 }
 
 fn read_username_from_file() -> Result<String, io::Error> {
     let f = File::open("hello.txt");
-
     let mut f = match f {
         Ok(file) => file,
         Err(e) => return Err(e),
