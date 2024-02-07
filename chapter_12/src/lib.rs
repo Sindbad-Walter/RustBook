@@ -1,5 +1,7 @@
-use std::{env, error::Error, fs};
-
+use {
+    rayon::prelude::*,
+    std::{env, error::Error, fs},
+};
 pub struct Config {
     pub query: String,
     pub file_path: String,
@@ -19,6 +21,7 @@ impl Config {
         };
 
         let ignore_case = env::var("IGNORE_CASE").is_ok();
+        dbg!(ignore_case);
         Ok(Config {
             query,
             file_path,
@@ -47,7 +50,22 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
         .filter(|line| line.contains(query))
         .collect()
 }
+pub fn search_par<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    contents
+        .lines()
+        .par_bridge()
+        .filter(|line| line.contains(query))
+        .collect()
+}
+pub fn search_insensitive_par<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query_lowercase = query.to_lowercase();
 
+    contents
+        .lines()
+        .par_bridge()
+        .filter(|line| line.to_lowercase().contains(&query_lowercase))
+        .collect()
+}
 pub fn search_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let query = query.to_lowercase();
     let mut results = Vec::new();
@@ -64,7 +82,6 @@ pub fn search_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
     #[test]
     fn case_sensitive() {
         let query = "duct";
